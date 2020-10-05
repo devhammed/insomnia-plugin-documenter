@@ -1,6 +1,6 @@
 {
   "name": "insomnia-plugin-documenter",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "plugin.js",
   "license": "MIT",
   "repository": {
