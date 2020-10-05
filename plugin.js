@@ -5,6 +5,7 @@ const slugify = require('slugify')
 const copyDir = require('copy-dir')
 const untildify = require('untildify')
 
+const CONFIG_KEY = 'output_path'
 const PACKAGE_DIST_PATH = path.resolve(__dirname, 'documenter')
 
 module.exports.workspaceActions = [
@@ -15,7 +16,8 @@ module.exports.workspaceActions = [
       let outputPath = await context.app.prompt(
         'Output Path (e.g ~/Documents/My-Docs)',
         {
-          submitName: 'Export'
+          submitName: 'Export',
+          defaultValue: await context.store.getItem(CONFIG_KEY)
         }
       )
 
@@ -27,6 +29,8 @@ module.exports.workspaceActions = [
       } else {
         outputPath = untildify(outputPath)
       }
+
+      await context.store.setItem(CONFIG_KEY, outputPath)
 
       try {
         await mkdirp(outputPath)
