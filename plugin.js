@@ -5,7 +5,6 @@ const slugify = require('slugify')
 const copyDir = require('copy-dir')
 const untildify = require('untildify')
 
-const CONFIG_KEY = 'output_path'
 const PACKAGE_DIST_PATH = path.resolve(__dirname, 'documenter')
 
 module.exports.workspaceActions = [
@@ -13,12 +12,14 @@ module.exports.workspaceActions = [
     icon: 'fa-cloud-upload',
     label: 'Export HTML Documentation...',
     action: async (context, { workspace }) => {
+      const outputPathConfigKey = `output_path_${workspace._id}`
+
       try {
         let outputPath = await context.app.prompt(
           'Output Path (e.g ~/Documents/My-Docs)',
           {
             submitName: 'Export',
-            defaultValue: await context.store.getItem(CONFIG_KEY)
+            defaultValue: await context.store.getItem(outputPathConfigKey)
           }
         )
 
@@ -31,7 +32,7 @@ module.exports.workspaceActions = [
           outputPath = untildify(outputPath)
         }
 
-        await context.store.setItem(CONFIG_KEY, outputPath)
+        await context.store.setItem(outputPathConfigKey, outputPath)
 
         try {
           await mkdirp(outputPath)
