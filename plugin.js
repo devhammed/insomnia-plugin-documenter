@@ -84,6 +84,16 @@ module.exports.workspaceActions = [
                 }`
               )
           )
+
+          const jsFilePath = path.join(outputPath, 'bundle.js')
+
+          fs.writeFileSync(
+            jsFilePath,
+            fs
+              .readFileSync(jsFilePath)
+              .toString()
+              .replace('logo.png', `${rootPath}/logo.png`)
+          )
         } catch (_) {
           await context.app.alert(
             'Something went wrong!',
